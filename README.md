@@ -1,7 +1,7 @@
 # Weather Application
 
 ## Description
-This Weather Application provides real-time weather forecasts, including detailed temperature trends, precipitation, and wind speed information. Featuring a dynamic display with weather icons and graphs, it offers an intuitive and visually engaging user experience.
+This Weather Application provides real-time weather forecasts, including detailed temperature trends, precipitation, and wind speed information. Featuring a dynamic display with weather icons and graphs.
 
 **Live Demo:** [Weather Application]([https://sofianeas.github.io/Montpellier-Weather-Forecast]
 
