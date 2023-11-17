@@ -1,0 +1,75 @@
+/* General Styles */
+body {
+    font-family: 'Arial', sans-serif; /* Change to your preferred font */
+    margin: 0;
+    padding-top: 60px; /* Adjust based on the height of the navbar */
+    background: #e9ecef; /* Soft background color */
+}
+
+/* Background Image Styling */
+body::before {
+    content: "";
+    background-image: url('banner_image.jpeg'); /* Ensure the path is correct */
+    background-size: cover; /* Cover will make sure the image covers the entire viewport */
+    background-position: center; /* Center the background image */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.6; /* Adjust opacity for better readability */
+    z-index: -1;
+}
+
+/* Navigation Bar Enhancements */
+.navbar {
+    background-color: #007bff; /* Match with the table header */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+}
+
+.nav-link {
+    color: white; /* Adjust for better contrast */
+}
+
+.nav-link:hover {
+    color: #e9ecef; /* Light color on hover */
+}
+
+/* Table Styles */
+.table {
+    background-color: #fff; /* White background for the table */
+    margin: 20px 0; /* Space out table from other content */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow around table */
+    border-radius: 8px; /* Rounded corners for the table */
+    overflow: hidden; /* Ensures the rounded corners */
+}
+
+.table thead th {
+    background-color: #007bff; /* Consistent color with the navbar */
+    color: white;
+    font-size: 1.05em; /* Slightly larger font size */
+}
+
+.table tbody tr {
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.table tbody tr:nth-child(even) {
+    background-color: #f2f2f2; /* Alternating row color */
+}
+
+.table tbody tr:hover {
+    background-color: #cce5ff; /* Color on hover */
+}
+
+th, td {
+    text-align: left;
+    padding: 12px; /* Increased padding for better readability */
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    body {
+        padding-top: 120px; /* Adjust for smaller screens */
+    }
+}
