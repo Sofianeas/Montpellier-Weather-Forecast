@@ -35,6 +35,7 @@ Contact Information
 For any further queries regarding this project, please reach out to:
 
 **Technologies Used**
+
 Name: [Sofiane AOUES]
 
 Email: [aoues.sofiane99@gmail.com]
