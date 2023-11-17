@@ -15,4 +15,28 @@ To set up the Weather Application locally, follow these steps:
 
 1. **Clone the repository:**
    ```bash
-   git clone [[[URL-to-your-repo](https://github.com/Sofianeas/Montpellier-Weather-Forecast)https://github.com/Sofianeas/Montpellier-Weather-Forecast]()
+   git clone [https://github.com/Sofianeas/Montpellier-Weather-Forecast]
+
+1. **Navigate to the project directory:**
+   ```bash
+   cd weather-application
+
+**Usage**
+To use the Weather Application, open the index.html file in a web browser or visit the live site at Weather Application.
+
+**Technologies Used**
+- HTML
+
+- CSS (Bootstrap for responsive design)
+
+- JavaScript (Chart.js for graphical representations)
+  
+Contact Information
+For any further queries regarding this project, please reach out to:
+
+**Technologies Used**
+Name: [Sofiane AOUES]
+
+Email: [aoues.sofiane99@gmail.com]
+
+
