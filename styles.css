@@ -1,75 +1,210 @@
-/* General Styles */
+/* Root Variables */
+:root {
+    --primary-color: #007bff;
+    --text-color: #333;
+    --background-color: #e9ecef;
+    --dark-shadow: rgba(0, 0, 0, 0.1);
+    --light-shadow: rgba(0, 0, 0, 0.05);
+    --hover-light-blue: #cce5ff;
+    --dark-blue: #0056b3;
+    --light-grey: #f2f2f2;
+    --font-stack: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* Reset and Base Styles */
+html {
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+    font-size: 16px; /* Set base font-size for rem calculations */
+}
+
+*, *::before, *::after {
+    box-sizing: inherit;
+}
+
 body {
-    font-family: 'Arial', sans-serif; /* Change to your preferred font */
+    font-family: var(--font-stack);
     margin: 0;
-    padding-top: 60px; /* Adjust based on the height of the navbar */
-    background: #e9ecef; /* Soft background color */
+    padding-top: 60px; /* Adjust based on navbar height */
+    background: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6; /* Default line height for better readability */
 }
 
 /* Background Image Styling */
 body::before {
     content: "";
-    background-image: url('banner_image.jpeg'); /* Ensure the path is correct */
-    background-size: cover; /* Cover will make sure the image covers the entire viewport */
-    background-position: center; /* Center the background image */
+    background: url('banner_image.jpeg') center/cover no-repeat fixed;
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.6; /* Adjust opacity for better readability */
+    opacity: 0.6;
     z-index: -1;
+}
+
+/* Content Styles */
+.text-over-image {
+    text-shadow: 1px 1px 2px var(--dark-shadow);
+}
+
+img {
+    max-width: 100%;
+    height: auto;
 }
 
 /* Navigation Bar Enhancements */
 .navbar {
-    background-color: #007bff; /* Match with the table header */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Subtle shadow for depth */
+    background-color: var(--primary-color);
+    box-shadow: 0 2px 4px var(--dark-shadow);
 }
 
 .nav-link {
-    color: white; /* Adjust for better contrast */
+    color: #fff;
+    transition: color 0.3s ease-in-out;
 }
 
-.nav-link:hover {
-    color: #e9ecef; /* Light color on hover */
+.nav-link:hover, .nav-link:focus {
+    color: var(--background-color);
+}
+
+/* Interactive Elements */
+button, .button-like-element {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+button:hover, .button-like-element:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-0.125rem);
 }
 
 /* Table Styles */
 .table {
-    background-color: #fff; /* White background for the table */
-    margin: 20px 0; /* Space out table from other content */
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05); /* Subtle shadow around table */
-    border-radius: 8px; /* Rounded corners for the table */
-    overflow: hidden; /* Ensures the rounded corners */
+    background-color: #fff;
+    margin: 1.25rem 0;
+    box-shadow: 0 4px 8px var(--light-shadow);
+    border-collapse: collapse;
 }
 
 .table thead th {
-    background-color: #007bff; /* Consistent color with the navbar */
-    color: white;
-    font-size: 1.05em; /* Slightly larger font size */
+    background-color: var(--primary-color);
+    color: #fff;
+    font-size: 1.05rem;
 }
 
 .table tbody tr {
-    transition: background-color 0.3s; /* Smooth transition for hover effect */
+    transition: background-color 0.3s ease-in-out;
 }
 
 .table tbody tr:nth-child(even) {
-    background-color: #f2f2f2; /* Alternating row color */
+    background-color: var(--light-grey);
 }
 
 .table tbody tr:hover {
-    background-color: #cce5ff; /* Color on hover */
+    background-color: var(--hover-light-blue);
 }
 
 th, td {
     text-align: left;
-    padding: 12px; /* Increased padding for better readability */
+    padding: 0.75rem;
 }
 
-/* Responsive Adjustments */
+/* Form Elements */
+input, select, textarea {
+    border: 1px solid #ced4da;
+    padding: 0.625rem;
+    border-radius: 0.25rem;
+    width: 100%;
+    margin-bottom: 0.9375rem;
+}
+
+input[type="submit"], button {
+    background-color: var(--primary-color);
+    color: #fff;
+    border: none;
+    padding: 0.625rem 1.25rem;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+input[type="submit"]:hover, button:hover {
+    background-color: var(--dark-blue);
+    transform: translateY(-2px);
+}
+
+/* Media Queries for Responsiveness */
 @media (max-width: 768px) {
     body {
-        padding-top: 120px; /* Adjust for smaller screens */
+        padding-top: 50px; /* Adjust for smaller navbar */
+    }
+
+    .navbar {
+        padding: 0 10px; /* Reduce padding on smaller screens */
+    }
+
+    .table {
+        display: block;
+        overflow-x: auto; /* Responsive tables */
     }
 }
+
+@media (max-width: 576px) {
+    .button-like-element, button {
+        padding: 0.5rem 1rem; /* Smaller buttons on mobile */
+    }
+
+    input, select, textarea {
+        padding: 0.5rem; /* Smaller form elements */
+    }
+}
+
+/* Accessibility Enhancements */
+:focus {
+    outline: 3px solid var(--hover-light-blue); /* Visible focus ring */
+}
+
+/* Transition Effects */
+.transition-effect {
+    transition: all 0.3s ease-in-out;
+}
+
+/* Grid and Flexbox Layouts */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.flex-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+/* Utility Classes */
+.text-center {
+    text-align: center;
+}
+
+.margin-auto {
+    margin: auto;
+}
+
+/* styles.css */
+.chart-container {
+    position: relative;
+    margin: auto;
+    height: 80vh;
+    width: 80vw;
+}
+/* More styles */
+
+/* End of CSS */

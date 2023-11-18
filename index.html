@@ -15,7 +15,42 @@
     <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
     <link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Custom Styles -->
+    <!-- Include Chart.js with the zoom plugin for chart interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@latest"></script>
+    <!-- Chart.js and plugins -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom@latest"></script>
+    
+    <!-- Date Range Picker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.js"></script>
+    
+
+    <!-- Include a date range picker library -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.js"></script>
+
+    <!-- Styles for the clickable navigation bar and other elements -->
+    <style>
+        .nav-link {
+            cursor: pointer;
+        }
+        .chart-container {
+    position: relative;
+    margin: auto;
+    height: 80vh;
+    width: 80vw;
+}
+.nav-link.active {
+    font-weight: bold;
+}
+
+        /* Additional styles for the chart and other elements */
+    </style>
+  
     <style>
         /* Custom styles here */
     </style>
@@ -69,35 +104,228 @@
 </table>
 <!-- Weather Chart Section -->
 <div class="weather-chart-container">
+
   <h2>Temperature Trends</h2>
   <canvas id="weatherChart"></canvas>
+  <!-- Date Range Picker Input -->
+  <input type="text" name="daterange" />
+  <label>
+    Dark Mode:
+    <input type="checkbox" id="darkModeToggle">
+</label>
 </div>
+
 <script>
-const ctx = document.getElementById('weatherChart').getContext('2d');
-const weatherChart = new Chart(ctx, {
-    type: 'line',
-    data: {
-        labels: timePoints, // Your time points array
-        datasets: [{
-            label: 'Temperature',
-            data: temperatures, // Your temperatures array
-            backgroundColor: 'rgba(0, 123, 255, 0.5)',
-            borderColor: 'rgba(0, 123, 255, 1)',
-            borderWidth: 1
-        }]
-    },
-    options: {
-        scales: {
-            yAxes: [{
-                ticks: {
-                    beginAtZero: true
+  const apiURL = 'https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&hourly=temperature_2m,precipitation,wind_speed_10m&timezone=Europe%2FBerlin';
+  
+  // Fetch data from the API
+  fetch(apiURL)
+      .then(response => response.json())
+      .then(data => {
+          const labels = data.hourly.time.map(t => new Date(t).toLocaleTimeString());
+          const temperatureData = data.hourly.temperature_2m;
+          const precipitationData = data.hourly.precipitation;
+          const windSpeedData = data.hourly.wind_speed_10m.map(speed => speed * 3.6); // Convert from m/s to km/h
+  
+          const ctx = document.getElementById('weatherChart').getContext('2d');
+          const weatherChart = new Chart(ctx, {
+              type: 'line', // Line chart
+              data: {
+                  labels: labels,
+                  datasets: [
+                      {
+                          label: 'Temperature (°C)',
+                          data: temperatureData,
+                          borderColor: 'rgb(255, 99, 132)',
+                          yAxisID: 'y',
+                      },
+                      {
+                          label: 'Precipitation (mm)',
+                          data: precipitationData,
+                          borderColor: 'rgb(54, 162, 235)',
+                          yAxisID: 'y1',
+                      },
+                      {
+                          label: 'Wind Speed (km/h)',
+                          data: windSpeedData,
+                          borderColor: 'rgb(75, 192, 192)',
+                          yAxisID: 'y2',
+                      }
+                  ]
+              },
+              options: {
+                  scales: {
+                      y: {
+                          type: 'linear',
+                          display: true,
+                          position: 'left',
+                          title: {
+                              display: true,
+                              text: 'Temperature (°C)'
+                          }
+                      },
+                      y1: {
+                          type: 'linear',
+                          display: true,
+                          position: 'right',
+                          grid: {
+                              drawOnChartArea: false,
+                          },
+                          title: {
+                              display: true,
+                              text: 'Precipitation (mm)'
+                          }
+                      },
+                      y2: {
+                          type: 'linear',
+                          display: true,
+                          position: 'right',
+                          grid: {
+                              drawOnChartArea: false,
+                          },
+                          title: {
+                              display: true,
+                              text: 'Wind Speed (km/h)'
+                          },
+                          // Ensure the wind speed axis is on the opposite side
+                          opposite: true
+                      }
+                  }
+              }
+          });
+      })
+      .catch(error => console.error('Error fetching data:', error));
+
+      $('input[name="daterange"]').daterangepicker({
+                opens: 'left'
+            }, function(start, end, label) {
+                // TODO: Fetch and update chart data based on the selected date range
+            });
+
+            // Dark mode toggle
+            document.getElementById('darkModeToggle').addEventListener('change', function() {
+                // TODO: Implement dark mode styles changes
+            });
+
+            // Enable zoom and pan functionality
+            weatherChart.options.plugins.zoom = {
+                pan: {
+                    enabled: true,
+                    mode: 'xy',
+                },
+                zoom: {
+                    wheel: {
+                        enabled: true,
+                    },
+                    pinch: {
+                        enabled: true,
+                    },
+                    mode: 'xy',
                 }
-            }]
-        }
-    }
+            };
+            
+            // Update chart with new options
+            weatherChart.update();
+
+
+// Toggle dark mode for the chart
+document.getElementById('darkModeToggle').addEventListener('change', function() {
+  if (this.checked) {
+      // Apply dark mode styles to the chart
+  } else {
+      // Revert to light mode styles
+  }
+  weatherChart.update();
 });
 
-</script>
+// Enable zoom and pan
+weatherChart.options.plugins.zoom = {
+  pan: {
+      enabled: true,
+      mode: 'xy',
+  },
+  zoom: {
+      wheel: {
+          enabled: true,
+      },
+      pinch: {
+          enabled: true,
+      },
+      mode: 'xy',
+  }
+};
+
+// Make sure to update the chart to apply new options
+weatherChart.update();
+  </script>
+
+
+<script>
+
+
+// This function updates the chart with new data
+function updateChartData(chart, labels, temperatures) {
+    chart.data.labels = labels;
+    chart.data.datasets[0].data = temperatures;
+    chart.update();
+}
+
+// This function initializes the chart with initial data
+function initializeChart(labels, temperatures) {
+    const ctx = document.getElementById('weatherChart').getContext('2d');
+    return new Chart(ctx, {
+        type: 'line', // A line chart is a good choice for temperature over time
+        data: {
+            labels: labels,
+            datasets: [{
+                label: 'Hourly Temperature (°C)',
+                data: temperatures,
+                fill: false,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'hour',
+                        tooltipFormat: 'HH:mm', // Display the time in hours and minutes
+                        displayFormats: {
+                            hour: 'HH:mm' // Adjust the display format to show hours and minutes
+                        }
+                    },
+                    title: {
+                        display: true,
+                        text: 'Time'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Temperature (°C)'
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true
+                }
+            },
+            responsive: true,
+            maintainAspectRatio: false
+        }
+    });
+}
+
+// Initial fetch of data to display the chart
+fetchData();
+
+// Optional: Set an interval to periodically fetch and update the chart
+setInterval(fetchData, 60 * 60 * 1000); // For example, every hour
+
+  </script>
 
 
 
@@ -119,7 +347,7 @@ const weatherChart = new Chart(ctx, {
   <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
   <script src="site_libs/quarto-html/anchor.min.js"></script>
   <script src="site_libs/bootstrap/bootstrap.min.js"></script>
-  <script src="your-custom-script.js"></script>
+  
 
     <script>
         
@@ -184,7 +412,7 @@ const weatherChart = new Chart(ctx, {
         }
 
         function fetchWeatherCode() {
-    const weatherCodeApiUrl = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&hourly=weathercode,windspeed_10m&timezone=Europe%2FBerlin";
+    const weatherCodeApiUrl = "https://api.open-meteo.com/v1/meteofrance?latitude=43.6109&longitude=3.8763&daily=temperature_2m_max,temperature_2m_min&hourly=precipitation&timezone=Europe%2FBerlin";
 
     fetch(weatherCodeApiUrl)
         .then(response => response.json())
@@ -222,10 +450,6 @@ const weatherChart = new Chart(ctx, {
         fetchMaxMinTemperatureAndPrecipitations();
         fetchWeatherCode();
     </script>
-
-
-
-
 
 
 
